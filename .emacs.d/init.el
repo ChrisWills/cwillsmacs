@@ -6,9 +6,9 @@
 ;; seems to fix it.
 (setq help-window-select t)
 
-;; We deliberately do not load ~/cwills-emacs-custom.el - it is strictly used as
+;; We deliberately do not load custom.el - it is strictly used as
 ;; a way to figured out what the formating is for setting a custom variable.
-(setq custom-file "~/cwills-emacs-custom.el")
+(setq custom-file (concat user-emacs-directory nil "/custom.el"))
 
 (if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
@@ -44,6 +44,25 @@
                     :height 120
                     :weight 'regular)
 
+;;
+;; straight.el -----------------------------------------------------------------
+;;
+(setq straight-use-package-by-default t)
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+
+
 ;; Save location within a file
 (save-place-mode t)
 ;;(global-hl-line-mode 1)                      ; highlight current line
@@ -54,28 +73,31 @@
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-(add-to-list 'load-path "~/.cwills-emacs.d/elisp")
-(add-to-list 'custom-theme-load-path "~/.cwills-emacs.d/themes")
-
-(setq package-user-dir (concat user-emacs-directory nil "/packages"))
+(add-to-list 'load-path (concat user-emacs-directory nil "/elisp"))
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory nil "/themes"))
+(setq package-user-dir (concat user-emacs-directory nil "/packages"))
+
 ;; Initialize package sources
-(require 'package)
+;;(require 'package)
 
-(setq package-archives  '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-
-(package-initialize)
-(unless package-archive-contents
- (package-refresh-contents))
+;;(setq package-archives  '(("melpa" . "https://melpa.org/packages/")
+;;                         ("org" . "https://orgmode.org/elpa/")
+;;                         ("elpa" . "https://elpa.gnu.org/packages/")))
+;;
+;;(package-initialize)
+;;(unless package-archive-contents
+;; (package-refresh-contents))
 
 ;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+;;(unless (package-installed-p 'use-package)
+;;   (package-install 'use-package))
+;;
+;;(require 'use-package)
+;;(setq use-package-always-ensure t)
 
-(require 'use-package)
-(setq use-package-always-ensure t)
+
+(straight-use-package 'use-package)
+
 
 (require 'help-fns+)
 (require 'recentf)
@@ -91,6 +113,7 @@
          )))
 
 (use-package ivy
+  :straight t
   :diminish
   :bind (("C-s" . swiper)
          :map ivy-minibuffer-map
@@ -111,6 +134,7 @@
   (ivy-mode 1))
 
 (use-package all-the-icons
+  :straight t
   :config (setq all-the-icons-scale-factor 1.0))
 
 ;;(use-package modus-themes
@@ -134,7 +158,8 @@
 ;;  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
 
 (use-package doom-modeline
-  :ensure t
+  :straight t
+  ;;:ensure t
   :config
   ;;(setq doom-modeline-height 40)
   (setq doom-modeline-height 30)
@@ -142,7 +167,8 @@
   (doom-modeline-mode 1))
 
 (use-package doom-themes
-  :ensure t
+  :straight t
+  ;;:ensure t
   :after doom-modeline
   :custom-face
 ;;  (custom-face-tag ((t (:foreground "#6c71c4" :weight normal :height 1.2))))
@@ -213,16 +239,20 @@
 (add-hook 'text-mode-hook 'cw/text-mode-setup)
 
 (use-package rainbow-delimiters
+  :straight t
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package highlight-numbers
+  :straight t
   :hook (prog-mode . highlight-numbers-mode))
 
 (use-package smartparens
+  :straight t
   :init (require 'smartparens-config)
   :hook (prog-mode . smartparens-mode))
 
 (use-package highlight-parentheses
+  :straight t
   :hook (prog-mode . highlight-parentheses-mode)
   :config
   (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultra-bold)
@@ -230,6 +260,7 @@
   )
 
 (use-package which-key
+  :straight t
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 1)
@@ -241,20 +272,24 @@
 ;;  :init (all-the-icons-ivy-rich-mode 1)
 ;;  :config (setq inhibit-compacting-font-caches t))
 
-(use-package ivy-rich
-  :init (ivy-rich-mode 1)
-  :config
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (use-package counsel
+  :straight t
   :bind (("M-x" . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
          :map minibuffer-local-map
          ("C-r" . 'counsel-minibuffer-history)))
 
+(use-package ivy-rich
+  :straight t
+  :init (ivy-rich-mode 1)
+  :config
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+
 ;;(use-package prescient)
 ;;(use-package ivy-prescient)
 (use-package amx
+  :straight t
   :init (amx-mode 1))
 
 ;; Too slow
@@ -269,9 +304,11 @@
 ;;  ([remap describe-key] . helpful-key)
 ;;  ([remap describe-symbol] . helpful-symbol))
 
-(use-package general)
+(use-package general
+  :straight t)
 
 (use-package evil
+  :straight t
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -300,14 +337,17 @@
 
   (evil-set-undo-system 'undo-fu))
 
-(use-package undo-fu)
+(use-package undo-fu
+  :straight t)
 
 (use-package evil-collection
+  :straight t
   :after evil
   :config
   (evil-collection-init))
 
 (use-package evil-surround
+  :straight t
   :after evil
   :config
   (global-evil-surround-mode 1)
@@ -318,6 +358,7 @@
    "S" 'evil-substitute))
 
 (use-package eshell
+  :straight t
   :config
   (setq eshell-highlight-prompt nil)
   (setq eshell-buffer-name "eshell")
@@ -364,11 +405,13 @@
 
 ;; This makes eshell look cool - copied from spacemacs
 (use-package eshell-prompt-extras
+  :straight t
   :after eshell
   :config (setq eshell-prompt-function #'epe-theme-lambda))
 
 (use-package dired
-  :ensure nil
+  :straight nil
+  ;;:ensure nil
   :custom ((dired-listing-switches "-al --group-directories-first"))
   :config
   (general-define-key
@@ -378,6 +421,7 @@
    "h" 'dired-up-directory))
 
 (use-package all-the-icons-dired
+  :straight t
   :hook (dired-mode . all-the-icons-dired-mode)
   :custom (all-the-icons-dired-monochrome nil))
 ;;(use-package treemacs-icons-dired
@@ -385,7 +429,8 @@
 
 ;; Magit Configuration ---------------------------------------------------------
 
-(use-package magit)
+(use-package magit
+  :straight t)
 
 ;; Org Mode Configuration ------------------------------------------------------
 
@@ -405,18 +450,21 @@
   (add-to-list 'org-structure-template-alist '(py . "src python")))
 
 (use-package org
+  :straight t
   :hook (org-mode . cw/org-mode-setup)
   :config
   (setq org-ellipsis " ↴")
   (setq org-hide-emphasis-markers t))
 
 (use-package org-bullets
+  :straight t
   :after org
   :hook (org-mode . org-bullets-mode)
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 (use-package org-present
+  :straight t
   :after org)
 
 ;; Center and pad org-mode to make it look almost list a webpage/standard document editor
@@ -429,6 +477,7 @@
   :hook (org-mode . cw/org-mode-visual-fill-setup))
 
 (use-package org-babel-eval-in-repl
+  :straight t
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -436,14 +485,19 @@
      (python . t)
      (shell . t))))
 
-(use-package haskell-mode)
+(use-package haskell-mode
+  :straight t)
 
 ;; Eglot -----------------------------------------------------------------------
 
-(use-package company)
-(use-package flycheck)
-(use-package eglot)
+(use-package company
+  :straight t)
+(use-package flycheck
+  :straight t)
+(use-package eglot
+  :straight t)
 (use-package ggtags
+  :straight t
   :hook ((c-mode c++-mode objc-mode cuda-mode) .
          (lambda ()
            (setq-local imenu-create-index-function
@@ -457,7 +511,9 @@
    "f d" #'ggtags-find-definition
    "i m" #'counsel-imenu)
   )
-(use-package counsel-gtags)
+(use-package counsel-gtags
+  :straight t)
+
 
 ;; LSP Mode --------------------------------------------------------------------
 
@@ -512,7 +568,7 @@
   "f"  '(:ignore t :which-key "file")
   "ff" '(counsel-find-file :which-key "find-file")
   "fj" '(dired-jump :which-key "dired-jump")
-  "f e d" #'(lambda () (interactive) (switch-to-buffer (find-file-noselect "~/cwills-emacs-init.el")))
+  "f e d" #'(lambda () (interactive) (switch-to-buffer (find-file-noselect "~/.emacs.d/init.el")))
   "t"  '(:ignore t :which-key "toggles")
   "tt" '(counsel-load-theme :which-key "choose theme"))
 
@@ -526,7 +582,8 @@
   "TAB" '(other-window :which-key "other-window"))
 
 (use-package epg
-  :ensure nil
+  :straight t
+  ;;:ensure nil
   :custom
   (safe-local-variable-values '((epa-file-encrypt-to . cwills\.dev@gmail\.com)))
   :config

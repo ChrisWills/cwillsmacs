@@ -3,6 +3,5 @@
 EMACS=/usr/bin/emacs
 #EMACS=/home/cwills/.nix-profile/bin/emacs
 
-LSP_USE_PLISTS=true TERM=xterm-24bit COLORTERM=truecolor ${EMACS} -Q --load /home/cwills/cwills-emacs-hacks.el --load /home/cwills/cwills-emacs-init.el $@ 
-
-
+#LSP_USE_PLISTS=true TERM=xterm-24bit COLORTERM=truecolor ${EMACS} -bg "#002b36" $@ 
+LSP_USE_PLISTS=true TERM=xterm-24bit COLORTERM=truecolor ${EMACS} -bg "black" $@ 
