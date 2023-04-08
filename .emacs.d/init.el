@@ -98,7 +98,6 @@
 
 (straight-use-package 'use-package)
 
-
 (require 'help-fns+)
 (require 'recentf)
 
@@ -137,72 +136,41 @@
   :straight t
   :config (setq all-the-icons-scale-factor 1.0))
 
-;;(use-package modus-themes
-;;  :ensure t
-;;  :config
-;;  ;; Add all your customizations prior to loading the themes
-;;  (setq modus-themes-italic-constructs t
-;;        modus-themes-bold-constructs t)
-;;
-;;  (setq modus-themes-org-blocks 'gray-background)
-;;  ;; Maybe define some palette overrides, such as by using our presets
-;;;;  (setq modus-themes-common-palette-overrides
-;;;;       modus-themes-preset-overrides-intense)
-;;
-;;  ;; Load the theme of your choice.
-;;;;  (load-theme 'modus-operandi t)
-;;;;  (load-theme 'modus-operandi-tinted t)
-;;;;  (load-theme 'modus-operandi-deuteranopia t)
-;;  (load-theme 'modus-vivendi-tinted t)
-;;
-;;  (define-key global-map (kbd "<f5>") #'modus-themes-toggle))
+(use-package modus-themes
+  :straight t
+  :config
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs t)
+
+  (setq modus-themes-org-blocks 'gray-background)
+  ;; Maybe define some palette overrides, such as by using our presets
+;;  (setq modus-themes-common-palette-overrides
+;;       modus-themes-preset-overrides-intense)
+
+  ;; Load the theme of your choice.
+;;  (load-theme 'modus-operandi t)
+;;  (load-theme 'modus-operandi-tinted t)
+;;  (load-theme 'modus-operandi-deuteranopia t)
+  ;;(load-theme 'modus-vivendi-tinted t)
+
+  ;;(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+  )
 
 (use-package doom-modeline
   :straight t
   ;;:ensure t
   :config
   ;;(setq doom-modeline-height 40)
+  (setq doom-modeline-buffer-file-name-style 'buffer-name)
   (setq doom-modeline-height 30)
   (setq doom-modeline-icon t)
   (doom-modeline-mode 1))
 
 (use-package doom-themes
   :straight t
-  ;;:ensure t
   :after doom-modeline
-  :custom-face
-;;  (custom-face-tag ((t (:foreground "#6c71c4" :weight normal :height 1.2))))
-;;  (custom-group-subtitle ((t (:foreground "#b58900" :weight bold))))
-;;  (custom-group-tag ((t (:inherit variable-pitch :foreground "#268bd2" :height 1.2))))
-;;  (custom-variable-tag ((t (:inherit variable-pitch :foreground "#2aa198" :height 1.2))))
-;;  (font-lock-builtin-face ((t (:foreground "#268bd2" :weight bold))))
-;;  (font-lock-constant-face ((t (:foreground "#268bd2" :weight bold))))
-;;  (font-lock-preprocessor-face ((t (:foreground "#268bd2" :weight normal))))
-;;  (highlight-numbers-number ((t (:foreground "#6c71c4" :weight normal))))
-;;  (org-code ((t (:foreground "#586e75"))))
-;;  (org-meta-line ((t (:foreground "#586e75" :slant italic))))
-;;  (rainbow-delimiters-depth-1-face ((t (:foreground "#2aa198"))))
-;;  (rainbow-delimiters-depth-2-face ((t (:foreground "#b58900"))))
-;;  (rainbow-delimiters-depth-3-face ((t (:foreground "#268bd2"))))
-;;  (rainbow-delimiters-depth-4-face ((t (:foreground "#6c71c4"))))
-;;  (rainbow-delimiters-depth-5-face ((t (:foreground "#859900"))))
-;;  (rainbow-delimiters-depth-6-face ((t (:foreground "#b58900"))))
-;;  (rainbow-delimiters-depth-7-face ((t (:foreground "#268bd2"))))
-;;  (rainbow-delimiters-depth-8-face ((t (:foreground "#6c71c4"))))
-;;  (rainbow-delimiters-depth-9-face ((t (:foreground "#859900"))))
-;;  (org-document-info-keyword ((t (:inherit (shadow) :height 1.3))))
-;;  (org-document-title ((t (:weight bold :foreground "#268bd2" :height 1.3))))
-;;  (outline-1
-;;   ((t (:weight bold :extend t :foreground "#268bd2" :height 1.3))))
-;;  (outline-2
-;;   ((t (:weight bold :extend t :foreground "#859900" :height 1.2))))
-;;  (outline-3
-;;   ((t (:weight bold :extend t :foreground "#35a69c" :height 1.15))))
-;;  (outline-4
-;;   ((t (:weight bold :extend t :foreground "#1e6fa8" :height 1.1))))
- ;; (header-line ((t (:inherit (default)))))
-  ;;(magit-diff-removed-highlight ((t (:extend t :background "#2E2A2D" :foreground "#dc322f" :weight bold))))
-  ;;; (font-lock-builtin-face ((t (:foreground "#6c71c4"))))
+  :custom (doom-cwills-solarized-dark-padded-modeline t)
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -256,8 +224,7 @@
   :hook (prog-mode . highlight-parentheses-mode)
   :config
   (set-face-attribute 'highlight-parentheses-highlight nil :weight 'ultra-bold)
-  (setq highlight-parentheses-colors '("Springgreen3" "IndianRed1" "IndianRed3" "IndianRed4"))
-  )
+  (setq highlight-parentheses-colors '("Springgreen3" "IndianRed1" "IndianRed3" "IndianRed4")))
 
 (use-package which-key
   :straight t
@@ -268,10 +235,13 @@
   ;(which-key-setup-minibuffer)
   (which-key-mode))
 
+(use-package projectile
+  :straight t
+  :config (projectile-mode 1))
+
 ;;(use-package all-the-icons-ivy-rich
 ;;  :init (all-the-icons-ivy-rich-mode 1)
 ;;  :config (setq inhibit-compacting-font-caches t))
-
 
 (use-package counsel
   :straight t
@@ -441,10 +411,6 @@
   ;;(variable-pitch-mode 1)
   (visual-line-mode 1)
   (setq header-line-format " ")
-  ;;(set-face-attribute 'header-line nil :inherit '(fixed-pitch) :height 1.0)
-  ;;(set-face-attribute 'org-code nil :inherit '(fixed-pitch) :foreground nil)
-  ;;(set-face-attribute 'org-block nil :inherit '(fixed-pitch) :foreground nil)
-  ;;;;(set-face-attribute 'org-verbatim nil :inherit '(fixed-pitch) :foreground "#859900")
   (add-to-list 'org-structure-template-alist '(sh . "src shell"))
   (add-to-list 'org-structure-template-alist '(el . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '(py . "src python")))

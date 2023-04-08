@@ -7,3 +7,5 @@ amx-items
 srecode-map.el
 transient
 auto-save-list
+custom.el
+projectile-bookmarks.eld

@@ -35,7 +35,7 @@
   :type 'boolean)
 
 (defcustom doom-cwills-solarized-dark-padded-modeline doom-themes-padded-modeline
-  "If non-nil, adds a 4px padding to the mode-line.
+  "If non-nil, adds a 8px padding to the mode-line.
 Can be an integer to determine the exact padding."
   :group 'doom-cwills-solarized-dark-theme
   :type '(choice integer boolean))
@@ -114,7 +114,7 @@ Can be an integer to determine the exact padding."
    (-modeline-bright doom-cwills-solarized-dark-brighter-modeline)
    (-modeline-pad
     (when doom-cwills-solarized-dark-padded-modeline
-      (if (integerp doom-cwills-solarized-dark-padded-modeline) doom-cwills-solarized-dark-padded-modeline 4)))
+      (if (integerp doom-cwills-solarized-dark-padded-modeline) doom-cwills-solarized-dark-padded-modeline 8)))
 
    (modeline-fg     nil)
    (modeline-fg-alt base5)
@@ -141,10 +141,10 @@ Can be an integer to determine the exact padding."
    ((line-number-current-line &override) :foreground fg)
    (mode-line
     :background modeline-bg :foreground modeline-fg
-    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
+    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,bg)))
    (mode-line-inactive
     :background modeline-bg-inactive :foreground modeline-fg-alt
-    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
+    :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,bg)))
    (mode-line-emphasis :foreground (if -modeline-bright base8 highlight))
 
    ;;;; centaur-tabs

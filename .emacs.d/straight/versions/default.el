@@ -48,6 +48,7 @@
  ("parent-mode" . "db692cf08deff2f0e973e6e86e26662b44813d1b")
  ("pkg-info" . "76ba7415480687d05a4353b27fea2ae02b8d9d61")
  ("project" . "985a4346709ceae1e84ca1fa146581ed96076bba")
+ ("projectile" . "271007c6611fcb08ddd326d7de9727c2ad5ef265")
  ("rainbow-delimiters" . "a32b39bdfe6c61c322c37226d66e1b6d4f107ed0")
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
  ("shrink-path.el" . "c14882c8599aec79a6e8ef2d06454254bb3e1e41")
